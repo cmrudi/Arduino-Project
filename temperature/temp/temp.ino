@@ -2,21 +2,13 @@
 //code belongs to this video: https://www.youtube.com/watch?v=sBIXxS4xTao
 
 #include <OneWire.h>
-#include <LiquidCrystal.h>
-
-LiquidCrystal lcd(12,11,5,4,3,2);
- int Fahrenheit;
- int Celsius;
+ 
 // DS18S20 Temperature chip i/o
-OneWire ds(7);  // on pin 7
+OneWire ds(2);  // on pin 10
  
 void setup(void) {
   // initialize inputs/outputs
   // start serial port
-  lcd.begin(16, 2);
-  lcd.setCursor(0,0);
-  lcd.clear();
-  
   Serial.begin(9600);
 }
  
@@ -31,38 +23,26 @@ void loop(void) {
   byte addr[8];
  
   if ( !ds.search(addr)) {
-    Serial.print("No more addresses.\n");
-     ds.reset_search();
-     
-     return;
- }
+      Serial.print("No more addresses.\n");
+      ds.reset_search();
+      return;
+  }
  
-  //Serial.print("R=");
+  Serial.print("R=");
   for( i = 0; i < 8; i++) {
     Serial.print(addr[i], HEX);
-   // Serial.print(" ");
+    Serial.print(" ");
   }
  
- if ( OneWire::crc8( addr, 7) != addr[7]) {
-    //  Serial.print("CRC is not valid!\n");
+  if ( OneWire::crc8( addr, 7) != addr[7]) {
+      Serial.print("CRC is not valid!\n");
       return;
   }
  
-  if ( addr[0] == 0x10) {
-      Serial.print("Device is a DS18S20 family device.\n");
-  }
-  else if ( addr[0] == 0x28) {
-      //Serial.print("Device is a DS18B20 family device.\n");
-  }
-  else {
-      Serial.print("Device family is not recognized: 0x");
-      Serial.println(addr[0],HEX);
-      return;
-  }
  
   ds.reset();
   ds.select(addr);
- ds.write(0x44,1);         // start conversion, with parasite power on at the end
+  ds.write(0x44,1);         // start conversion, with parasite power on at the end
  
   delay(1000);     // maybe 750ms is enough, maybe not
   // we might do a ds.depower() here, but the reset will take care of it.
@@ -71,17 +51,16 @@ void loop(void) {
   ds.select(addr);    
   ds.write(0xBE);         // Read Scratchpad
  
-  //Serial.print("P=");
-  //Serial.print(present,HEX);
-  //Serial.print(" ");
+  Serial.print("P=");
+  Serial.print(present,HEX);
+  Serial.print(" ");
   for ( i = 0; i < 9; i++) {           // we need 9 bytes
     data[i] = ds.read();
-  //  Serial.print(data[i], HEX);
-   // Serial.print(" ");
+    Serial.print(data[i], HEX);
+    Serial.print(" ");
   }
- // Serial.print(" CRC=");
-  //Serial.print( OneWire::crc8( data, 8), HEX);
-  
+  Serial.print(" CRC=");
+  Serial.print( OneWire::crc8( data, 8), HEX);
   Serial.println();
  
   //Conversion of raw data to C
@@ -98,7 +77,7 @@ void loop(void) {
   Whole = Tc_100 / 100;  // separate off the whole and fractional portions
   Fract = Tc_100 % 100;
  
- 
+
   if (SignBit) // If its negative
   {
      Serial.print("-");
@@ -110,19 +89,9 @@ void loop(void) {
      Serial.print("0");
   }
   Serial.print(Fract);
-  Serial.println(" Celsius");
-  Celsius = Whole;
-  lcd.clear();
-  lcd.write("Temp = ");
-  lcd.print(Whole, DEC);
-  lcd.write(" C");
-  Fahrenheit = (Celsius * 1.8) +32;//                Fx = (Cx * 1,8) + 32
-  
-  Serial.print(Fahrenheit);
-  Serial.println(" Fahrenheit");
-  
  
   Serial.print("\n");
   //End conversion to C
-  delay(5000);//now the monitor updates every six seconds
 }
+
+
