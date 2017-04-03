@@ -14,8 +14,9 @@
 // DS18S20 Temperature chip i/o
 OneWire ds(2);  // on pin 2
 
-int Whole,Fract;
-
+int tempWhole,tempFract;
+int initTemp;
+int onlineInput;
 void setup() {
     Serial.begin(9600);
     pinMode(E1, OUTPUT);
@@ -26,18 +27,53 @@ void setup() {
     pinMode(I3, OUTPUT);
     pinMode(I4, OUTPUT);
     pinMode(I4, OUTPUT);
+
+    readTemp();
+    initTemp = tempWhole;
 }
  
 void loop() {
     
     readTemp();
-    if (Whole==28) {
-      Serial.println("A");
-     // writeTemp();
-      //moveLeft();
+    writeTemp();
+
+    //BACA INPUT, masukkan ke onlineInput
+
+    switch (onlineInput) {
+      case 1: {
+        moveLeft();
+        //Tulis 1 di 7 segment
+        break;
+      }
+      case 2: {
+        moveForward();
+        //Tulis 2 di 7 segment
+        break;
+      }
+      case 3: {
+        moveRight();
+        //Tulis 3 di 7 segment
+        break;
+      }
+      case 4: {
+        moveBackward();
+        //Tulis 4 di 7 segment
+        break;
+      }
+      case 5: {
+        stopMove();
+        //Tulis 5 di 7 segment
+        break;
+      }              
     }
-    else {
-      //moveRight();
+    //End Switch
+
+    if((Whole - initTemp)>=2) {
+      //Tulis di LCD "PADAMKAN"
+      stopMove();
+      //Tulis 5 di 7 segment
+      delay(5000); //berenti 5 detik
+      //Tulis di LCD "API PADAM"
     }
     
 }
@@ -45,6 +81,7 @@ void loop() {
 /**
  * PROCEDURES FOR MOTOR
  */
+ 
 void moveForward(){
     analogWrite(E1, 255); // Run in half speed
     analogWrite(E2, 255); // Run in full speed
@@ -141,8 +178,8 @@ void readTemp(){
   }
   Tc_100 = (6 * TReading) + TReading / 4;    // multiply by (100 * 0.0625) or 6.25
  
-  Whole = Tc_100 / 100;  // separate off the whole and fractional portions
-  Fract = Tc_100 % 100;
+  tempWhole = Tc_100 / 100;  // separate off the tempWhole and tempFractional portions
+  tempFract = Tc_100 % 100;
  
 
   if (SignBit) // If its negative
@@ -154,13 +191,13 @@ void readTemp(){
 }
 
 void writeTemp() {
-  Serial.print(Whole);
+  Serial.print(tempWhole);
   Serial.print(".");
-  if (Fract < 10)
+  if (tempFract < 10)
   {
      Serial.print("0");
   }
-  Serial.print(Fract);
+  Serial.print(tempFract);
  
   Serial.print("\n");
 }
