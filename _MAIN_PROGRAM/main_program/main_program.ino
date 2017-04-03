@@ -58,7 +58,10 @@ void loop() {
     if(Serial.available() > 0){
       //read the whole string until '\n' delimiter is read
       String input = Serial.readStringUntil('\n');
-      onlineInput = input.toInt();
+      int val = input.toInt();
+      if (val > 0) {
+        onlineInput = val;
+      } 
     }
     readTemp();
     writeTemp();    
@@ -189,7 +192,7 @@ void readTemp(){
   
  
   if ( OneWire::crc8( addr, 7) != addr[7]) {
-      Serial.print("CRC is not valid!\n");
+      //Serial.print("CRC is not valid!\n");
       return;
   }
  
@@ -226,22 +229,22 @@ void readTemp(){
 
   if (SignBit) // If its negative
   {
-     Serial.print("-");
+     //Serial.print("-");
   }
   
   //End conversion to C
 }
 
 void writeTemp() {
-  Serial.print(tempWhole);
-  Serial.print(".");
+ //Serial.print(tempWhole);
+  //Serial.print(".");
   if (tempFract < 10)
   {
-     Serial.print("0");
+     //Serial.print("0");
   }
-  Serial.print(tempFract);
+  //Serial.print(tempFract);
  
-  Serial.print("\n");
+  //Serial.print("\n");
   lcd.setCursor(0,1);
   lcd.print(tempWhole);
   lcd.setCursor(2,1);
