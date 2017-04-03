@@ -1,3 +1,4 @@
+
 #include <OneWire.h>
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
@@ -17,8 +18,8 @@
 OneWire ds(2);  // on pin 2
 LiquidCrystal_I2C lcd(0x3F, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
-int tempWhole,tempFract,initTemp;
-int onlineInput= 5;
+int tempWhole,tempFract,initTemp = 0;
+int onlineInput= 1;
 
 byte zero  = B10000001;
 byte one   = B11111001;
@@ -53,12 +54,14 @@ void setup() {
 }
  
 void loop() {
+
+    if(Serial.available() > 0){
+      //read the whole string until '\n' delimiter is read
+      String input = Serial.readStringUntil('\n');
+      onlineInput = input.toInt();
+    }
     readTemp();
-    writeTemp();
-    lcd.setCursor(0,5);
-    String temp = tempWhole+","+tempFract+ (String)" C";
-    lcd.print(temp);
-    
+    writeTemp();    
     //BACA INPUT, masukkan ke onlineInput
 
     switch (onlineInput) {
@@ -102,16 +105,19 @@ void loop() {
       //Tulis di LCD "PADAMKAN"
       stopMove();
       //Tulis 5 di 7 segment
-      shiftOut(datax, clock, LSBFIRST, five);
       int i;
       for (i=5;i>0;i--) {
         printCount(i);
         delay(1000);
         //per detik ganti
       }
+      lcd.clear();
       lcd.setCursor(0,1);
       lcd.print("API PADAM");
       delay(1000);
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("Damkar Learning");
     }
 }
 
@@ -237,14 +243,21 @@ void writeTemp() {
  
   Serial.print("\n");
   lcd.setCursor(0,1);
-  lcd.write(tempWhole);
+  lcd.print(tempWhole);
+  lcd.setCursor(2,1);
+  lcd.print(".");
+  lcd.setCursor(3,1);
+  lcd.print(tempFract);
+  lcd.setCursor(5,1);
+  lcd.print("C");
+  lcd.setCursor(10,1);
+  lcd.print(onlineInput);
 }
 
 void printCount(int sec) {
-    lcd.clear();
     lcd.setCursor(0,1);
     lcd.print("PADAMKAN");
-    lcd.setCursor(0,10);
+    lcd.setCursor(10,1);
     lcd.print(sec);
 }
 
