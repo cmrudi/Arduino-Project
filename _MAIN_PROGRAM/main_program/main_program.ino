@@ -108,6 +108,7 @@ void loop() {
       //Tulis di LCD "PADAMKAN"
       stopMove();
       //Tulis 5 di 7 segment
+      shiftOut(datax, clock, LSBFIRST, five);
       int i;
       for (i=5;i>0;i--) {
         printCount(i);
