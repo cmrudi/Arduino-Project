@@ -1,20 +1,20 @@
-// include the library code:
-#include <LiquidCrystal.h>
-
-// initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-
-void setup() {
-  // set up the LCD's number of columns and rows:
-  lcd.begin(16, 2);
-  // Print a message to the LCD.
-  lcd.print("hello, world!");
+#include <Wire.h>
+#include <LCD.h>
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE); // Addr, En, Rw, Rs, d4, d5, d6, d7, backlighpin, polarity
+ 
+void setup()
+{
+    lcd.begin(16,2);
+    lcd.backlight();
+    lcd.setCursor(0, 0);
+    lcd.print("Hello world!");
+    lcd.setCursor(0, 1);
+    lcd.print("Row number: ");
+    lcd.setCursor(12, 1);
+    lcd.print("2");
 }
-
-void loop() {
-  // set the cursor to column 0, line 1
-  // (note: line 1 is the second row, since counting begins with 0):
-  lcd.setCursor(0, 1);
-  // print the number of seconds since reset:
-  lcd.print(millis() / 1000);
+void loop()
+{
+ 
 }
