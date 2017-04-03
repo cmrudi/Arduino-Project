@@ -1,5 +1,6 @@
 #include <OneWire.h>
-
+#include <LiquidCrystal_I2C.h>
+#include <Wire.h>
 
 
 
@@ -13,6 +14,7 @@
 
 // DS18S20 Temperature chip i/o
 OneWire ds(2);  // on pin 2
+LiquidCrystal_I2C lcd(0x3F, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
 int Whole,Fract;
 
@@ -26,6 +28,12 @@ void setup() {
     pinMode(I3, OUTPUT);
     pinMode(I4, OUTPUT);
     pinMode(I4, OUTPUT);
+
+    lcd.begin(16,2);
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Damkar Learning");
+
 }
  
 void loop() {
