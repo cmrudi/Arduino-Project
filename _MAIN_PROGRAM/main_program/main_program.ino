@@ -18,7 +18,7 @@ OneWire ds(2);  // on pin 2
 LiquidCrystal_I2C lcd(0x3F, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
 int tempWhole,tempFract,initTemp;
-int onlineInput=5;
+int onlineInput= 5;
 
 byte zero  = B10000001;
 byte one   = B11111001;
@@ -53,14 +53,9 @@ void setup() {
 }
  
 void loop() {
-    lcd.clear();
     readTemp();
     writeTemp();
-
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("Damkar Learning");
-    lcd.setCursor(1,0);
+    lcd.setCursor(0,5);
     String temp = tempWhole+","+tempFract+ (String)" C";
     lcd.print(temp);
     
@@ -101,8 +96,7 @@ void loop() {
     //End Switch
 
     if((tempWhole - initTemp)>=2) {
-      lcd.clear();
-      lcd.setCursor(0,0);
+      lcd.setCursor(0,1);
       lcd.print("PADAMKAN");
       delay(1000);
       //Tulis di LCD "PADAMKAN"
@@ -114,8 +108,7 @@ void loop() {
         delay(1000);
         //per detik ganti
       }
-      lcd.clear();
-      lcd.setCursor(0,0);
+      lcd.setCursor(0,1);
       lcd.print("API PADAM");
       delay(1000);
     }
@@ -242,13 +235,15 @@ void writeTemp() {
   Serial.print(tempFract);
  
   Serial.print("\n");
+  lcd.setCursor(0,1);
+  lcd.write(tempWhole);
 }
 
 void printCount(int sec) {
     lcd.clear();
-    lcd.setCursor(0,0);
+    lcd.setCursor(0,1);
     lcd.print("PADAMKAN");
-    lcd.setCursor(1,0);
+    lcd.setCursor(0,10);
     lcd.print(sec);
 }
 
