@@ -2,7 +2,8 @@
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
 
-
+#define datax 3
+#define clock 4
 
 #define E1 10  // Enable Pin for Right motor 
 #define E2 11  // Enable Pin for Left motor 
@@ -18,6 +19,17 @@ LiquidCrystal_I2C lcd(0x3F, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
 int tempWhole,tempFract,initTemp;
 int onlineInput=5;
+
+byte zero  = B10000001;
+byte one   = B11111001;
+byte two   = B00100101;
+byte three = B00101001;
+byte four  = B01011001;
+byte five  = B00001011;
+byte six   = B00000011;
+byte seven = B10111001;
+byte eight = B00000001;
+byte nine  = B00001001;
 
 void setup() {
     Serial.begin(9600);
@@ -58,26 +70,31 @@ void loop() {
       case 1: {
         moveLeft();
         //Tulis 1 di 7 segment
+        shiftOut(datax, clock, LSBFIRST, one);
         break;
       }
       case 2: {
         moveForward();
         //Tulis 2 di 7 segment
+        shiftOut(datax, clock, LSBFIRST, two);
         break;
       }
       case 3: {
         moveRight();
         //Tulis 3 di 7 segment
+        shiftOut(datax, clock, LSBFIRST, three);
         break;
       }
       case 4: {
         moveBackward();
         //Tulis 4 di 7 segment
+        shiftOut(datax, clock, LSBFIRST, four);
         break;
       }
       case 5: {
         stopMove();
         //Tulis 5 di 7 segment
+        shiftOut(datax, clock, LSBFIRST, five);
         break;
       }              
     }
