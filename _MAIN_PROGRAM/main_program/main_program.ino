@@ -42,7 +42,8 @@ void setup() {
     pinMode(I3, OUTPUT);
     pinMode(I4, OUTPUT);
     pinMode(I4, OUTPUT);
-
+    pinMode(datax, OUTPUT);
+    pinMode(clock, OUTPUT);
     readTemp();
     initTemp = tempWhole;
 
@@ -50,6 +51,7 @@ void setup() {
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print("Damkar Learning");
+
 
 }
  
