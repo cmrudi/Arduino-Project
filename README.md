@@ -1,4 +1,4 @@
-##Arduino Project
+## Arduino Project
 
 Untuk tugas besar IF3111 Platform-based Development kali ini, kami dari grup MieAceh mempersembahkan Arduino project dalam lanjutan aplikasi DamkarLearning.
 
@@ -18,7 +18,7 @@ Disini, kami membuat miniatur "pemadam kebakaran" dengan Arduino dan motor DC. K
 
 
 
-####Apa yang bisa dilakukan Arduino kami? 
+#### Apa yang bisa dilakukan Arduino kami? 
 ![](robot.jpg)
 Dengan komponen-komponen yang ada, kami bisa mengendalikannya dengan aplikasi Android **DamkarLearning**. Jadi, untuk arah geraknya dikendalikan melalui Android. Lalu, jika ada suhu yang terbaca tinggi, dia akan berusaha memadamkannya dalam hitungan 5..4..3..2..1.. PADAM!
 
